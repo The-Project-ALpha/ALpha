@@ -65,3 +65,20 @@ def ChangeLang(guild: discord.Guild, lang: str) -> None:
     with open(path, "w") as fp:
         fp.write(json.dumps(g))
     return
+
+
+def Traffic(member: discord.Member):
+    with open("./data/traffic/guilds.json", "r") as fp:
+        g = json.load(fp)
+    with open("./data/traffic/users.json", "r") as fp:
+        u = json.load(fp)
+    if not str(member.guild.id) in g:
+        g[str(member.guild.id)] = 0
+    if not str(member._user.id) in u:
+        u[str(member._user.id)] = 0
+    g[str(member.guild.id)] += 1
+    u[str(member._user.id)] += 1
+    with open("./data/traffic/guilds.json", "w") as fp:
+        json.dump(g, fp)
+    with open("./data/traffic/users.json", "w") as fp:
+        json.dump(u, fp)

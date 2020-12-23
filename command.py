@@ -8,6 +8,7 @@ class Command(Enum):
     hello = 3
     restart = 4
     langset = 5
+    _exec = 6
 
 
 def GetCommand(client: discord.client, msg: discord.Message) -> Command:
@@ -18,13 +19,16 @@ def GetCommand(client: discord.client, msg: discord.Message) -> Command:
     mc = msg.content
     mcl = mc.lower()
     mcs = mc.split()
-    mcsl = list()
+    mcsl = mcs[:]
     a = 0
+
     for i in mcs:
-        mcsl[i] = i.lower()
+        mcsl[a] = i.lower()
         a += 1
     if mcl == "~restart" and msg.author.id == 418023987864403968:
         return Command.restart
+    if mcsl[0] == "~exec" and msg.author.id == 418023987864403968:
+        return Command._exec
     if mcl == "~hello":
         return Command.hello
     if (
@@ -32,3 +36,4 @@ def GetCommand(client: discord.client, msg: discord.Message) -> Command:
     ) and msg.author.guild_permissions.administrator:
         if mcsl[1] == "lang":
             return Command.langset
+    return Command.none

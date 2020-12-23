@@ -7,6 +7,7 @@ import data
 import random
 import sys
 import logging
+import subprocess
 
 from command import Command
 
@@ -49,6 +50,7 @@ async def on_ready():
     logger.info(f"name : {client.user.name} , id : {client.user.name}")
 
     i = 0
+
     while True:
         act = (
             discord.Game(
@@ -63,10 +65,16 @@ async def on_ready():
 
 
 @client.event
+async def on_disconnect():
+    logger.info("disconnected")
+
+
+@client.event
 async def on_message(message: discord.Message):
     d = command.GetCommand(client, message)
     if d == Command.none:
         return
+    data.Traffic(message.author)
     c = data.Check(client, message.guild)
     if not c == None:
         title = "안녕하세요 👋" if c == "kor" else "Hi there 👋"
@@ -121,6 +129,9 @@ async def on_message(message: discord.Message):
             des = "eng => kor" if lang == "kor" else "kor => eng"
             color = random.randint(0, 16777215)
             await send(embed=discord.Embed(title=title, description=des, color=color))
+"""
+                )
+            )
     except Exception as e:
         logger.error(str(e))
         return
