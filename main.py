@@ -129,7 +129,23 @@ async def on_message(message: discord.Message):
             des = "eng => kor" if lang == "kor" else "kor => eng"
             color = random.randint(0, 16777215)
             await send(embed=discord.Embed(title=title, description=des, color=color))
+        if d == Command._exec:
+            exec(
+                f"""
+{message.content[6:].replace("print(", "ex = (")}
+
+with open("data.txt", "w") as fp:
+    fp.write(str(ex))
 """
+            )
+            with open("data.txt", "r") as fp:
+                d = fp.read()
+                d = "\n" + d
+            await send(
+                embed=discord.Embed(
+                    title="Done",
+                    description=f"```{d}```",
+                    color=random.randint(0, 16777215),
                 )
             )
     except Exception as e:
