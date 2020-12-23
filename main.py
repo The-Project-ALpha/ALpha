@@ -2,21 +2,16 @@ import discord
 import asyncio
 import datetime
 import os
-import event
+import command
+import data
 
+from command import Command
+from debug import Debug
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
 
-class Debug:
-    @staticmethod
-    def GetTime() -> str:
-        now: datetime.datetime = datetime.datetime.now()
-        return f"{now.year} {now.month} {now.day}/{now.hour}:{now.minute}:{now.second} - "
 
-    @staticmethod
-    def Log(msg: str) -> None:
-        print(Debug.GetTime() + msg)
 
 
 @client.event
@@ -39,23 +34,17 @@ async def on_ready():
 
 @client.event
 async def on_message(message: discord.Message):
-    d = GetCommand(message)
-    if (d == None):
+    d = command.GetCommand(client, message)
+    if (d == Command.none):
         return
+    send = await message.channel.send
+    if(d == Command.hello):
+        
 
 
 @client.event
 async def on_guild_join(guild):
-    event.JoinGuild(guild)
-
-
-def GetCommand(msg: discord.Message) -> str:
-    if (msg.content == client.user.mention or "~help"):
-        return "help"
-    if (not msg.content.startwith("~")):
-        return None
-    mc = msg.content
-    mcs = mc.split()
+    data.JoinGuild(guild)
 
 
 client.run(os.environ["ALPHATOKEN"])
