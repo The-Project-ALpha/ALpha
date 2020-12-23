@@ -1,4 +1,6 @@
 import datetime
+
+
 class Debug:
     @staticmethod
     def GetTime() -> str:

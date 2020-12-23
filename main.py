@@ -4,14 +4,12 @@ import datetime
 import os
 import command
 import data
+import random
 
 from command import Command
 from debug import Debug
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
-
-
-
 
 
 @client.event
@@ -38,8 +36,15 @@ async def on_message(message: discord.Message):
     if (d == Command.none):
         return
     send = await message.channel.send
-    if(d == Command.hello):
-        
+    lang = data.GetLang(message.guild)
+    if (d == Command.hello):
+        title = "안녕하세요 👋" if lang == "kor" else "Hi there 👋"
+        des = "ALpha는 Project ALpha에서 개발한 서버 관리 봇입니다.\n자세한 내용은 ~help로 알아보세요!" if lang == "kor" else "ALpha is a server management bot developed by Project ALpha.\n Find out more at ~help!"
+        color = random.randint(0, 16777215)
+        await send(
+            embed=discord.Embed(title=title, description=des, color=color)
+        )
+        return
 
 
 @client.event
