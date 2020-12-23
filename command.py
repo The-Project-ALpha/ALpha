@@ -7,6 +7,7 @@ class Command(Enum):
     helpme = 2
     hello = 3
     restart = 4
+    setting = 5
 
 
 def GetCommand(client: discord.client, msg: discord.Message) -> Command:
@@ -20,3 +21,8 @@ def GetCommand(client: discord.client, msg: discord.Message) -> Command:
         return Command.restart
     if (mc == "~hello"):
         return Command.hello
+    if (
+        (mcs[0] == "~set" and (not len(mcs) == 1)) and
+        msg.author.guild_permissions.administrator
+    ):
+        return Command.setting

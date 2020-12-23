@@ -27,8 +27,6 @@ def __get_logger():
 
     name = f"log/{datetime.datetime.now().strftime('%y-%m-%d-%H-%M-%S')}"
 
-    print(name)
-
     file_handler = logging.FileHandler(filename=f"{name}.log")
 
     file_handler.setLevel(logging.INFO)
@@ -52,9 +50,9 @@ async def on_ready():
     i = 0
     while True:
         act = discord.Game(
-            name=f"{len(client.users)} users, {len(client.guilds)} guilds"
+            name=f"In service to {len(client.users)} users, {len(client.guilds)} guilds"
         ) if i % 2 else discord.Game(
-            name=f"{len(client.users)} users, {len(client.guilds)} guilds"
+            name=f"check help to mention me or type ~help"
         )
         i += 1
         await client.change_presence(status=discord.Status.idle, activity=act)
@@ -74,7 +72,15 @@ async def on_message(message: discord.Message):
         await message.guild.owner.send(
             embed=discord.Embed(title=title, description=des, color=color)
         )
-        await client.get_guild(766164184060002314).get_channel(766164184060002317).send(embed=discord.Embed(title="ALpha is invited", description = f"`{message.guild.name}`, 인원 {len(message.guild.members)}명"))
+        await client.get_guild(766164184060002314).get_channel(
+            766164184060002317
+        ).send(
+            embed=discord.Embed(
+                title="ALpha is invited",
+                description=
+                f"`{message.guild.name}`, 인원 {len(message.guild.members)}명"
+            )
+        )
 
     try:
         send = message.channel.send
@@ -109,7 +115,14 @@ async def on_guild_join(guild):
     await guild.owner.send(
         embed=discord.Embed(title=title, description=des, color=color)
     )
-    await client.get_guild(766164184060002314).get_channel(766164184060002317).send(embed=discord.Embed(title="ALpha is invited", description = f"`{guild.name}`, 인원 {len(guild.members)}명"))
+    await client.get_guild(766164184060002314).get_channel(
+        766164184060002317
+    ).send(
+        embed=discord.Embed(
+            title="ALpha is invited",
+            description=f"`{guild.name}`, 인원 {len(guild.members)}명"
+        )
+    )
 
 
 client.run(os.environ["ALPHATOKEN"])

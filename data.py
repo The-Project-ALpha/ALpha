@@ -14,19 +14,15 @@ class GuildData:
         self.logch = logch
 
 
-def JoinGuild(client : discord.Client, guild: discord.Guild):
+def JoinGuild(client: discord.Client, guild: discord.Guild):
     path = f"./data/guilds/{guild.id}.json"
     region: discord.VoiceRegion = guild.region
-    print(region)
     lang = "eng"
     if (region == discord.VoiceRegion.south_korea):
         lang = "kor"
     data = {"lang": lang, "logch": 0}
-    print(json.dumps(data))
     with open(path, "w") as fp:
         fp.write(json.dumps(data))
-
-
     return lang
 
 
@@ -43,7 +39,7 @@ def GetLang(guild: discord.Guild) -> str:
     return g["lang"]
 
 
-def Check(client:discord.Client, guild: discord.Guild):
+def Check(client: discord.Client, guild: discord.Guild):
     path = f"./data/guilds/{guild.id}.json"
     if (os.path.isfile(path)):
         return None
