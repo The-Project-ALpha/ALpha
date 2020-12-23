@@ -11,9 +11,9 @@ class Command(Enum):
 
 
 def GetCommand(client: discord.client, msg: discord.Message) -> Command:
-    if (msg.content == client.user.mention or msg.content == "~help"):
+    if msg.content == client.user.mention or msg.content == "~help":
         return Command.helpme
-    if (not msg.content.startswith("~")):
+    if not msg.content.startswith("~"):
         return Command.none
     mc = msg.content
     mcl = mc.lower()
@@ -23,13 +23,12 @@ def GetCommand(client: discord.client, msg: discord.Message) -> Command:
     for i in mcs:
         mcsl[i] = i.lower()
         a += 1
-    if (mcl == "~restart" and msg.author.id == 418023987864403968):
+    if mcl == "~restart" and msg.author.id == 418023987864403968:
         return Command.restart
-    if (mcl == "~hello"):
+    if mcl == "~hello":
         return Command.hello
     if (
-        (mcsl[0] == "~set" and (not len(mcsl) == 1)) and
-        msg.author.guild_permissions.administrator
-    ):
-        if (mcsl[1] == "lang"):
+        mcsl[0] == "~set" and (not len(mcsl) == 1)
+    ) and msg.author.guild_permissions.administrator:
+        if mcsl[1] == "lang":
             return Command.langset

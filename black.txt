@@ -1,0 +1,4 @@
+black data.py
+black command.py
+black logger.py
+black main.py

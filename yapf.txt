@@ -1,4 +1,0 @@
-yapf --style facebook -i main.py
-yapf --style facebook -i data.py
-yapf --style facebook -i command.py
-yapf --style facebook -i logger.py
