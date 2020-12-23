@@ -44,3 +44,20 @@ def Check(client: discord.Client, guild: discord.Guild):
     if (os.path.isfile(path)):
         return None
     return JoinGuild(client, guild)
+
+
+def ChangeLang(guild: discord.Guild, lang: str) -> None:
+    path = f"./data/guilds/{guild.id}.json"
+    l = lang.lower()
+    l = l.replace("korean", "kor").replace("한국어", "kor").replace(
+        "korea", "kor"
+    ).replace("한국", "kor").replace("한국말", "kor")
+    if (not l == "kor"):
+        l = "eng"
+    with open(path, "r") as fp:
+        d = fp.read()
+    g = json.loads(d)
+    g["lang"] = l
+    with open(path, "w") as fp:
+        fp.write(json.dumps(g))
+    return

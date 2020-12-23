@@ -50,7 +50,8 @@ async def on_ready():
     i = 0
     while True:
         act = discord.Game(
-            name=f"In service to {len(client.users)} users, {len(client.guilds)} guilds"
+            name=
+            f"In service to {len(client.users)} users, {len(client.guilds)} guilds"
         ) if i % 2 else discord.Game(
             name=f"check help to mention me or type ~help"
         )
@@ -71,6 +72,13 @@ async def on_message(message: discord.Message):
         color = random.randint(0, 1677215)
         await message.guild.owner.send(
             embed=discord.Embed(title=title, description=des, color=color)
+        )
+        await message.guild.owner.send(
+            embed=discord.Embed(
+                title="Language Setting / 언어 설정",
+                description=
+                f"ENG\nSet the bot's language to ~set lang <Language> command.\ncurrent bot's lang : {c}\n\nKOR\n봇의 언어를 ~set lang <언어> 커맨드로 설정해보세요.\n현재 봇의 언어 : {c}"
+            )
         )
         await client.get_guild(766164184060002314).get_channel(
             766164184060002317
@@ -101,6 +109,15 @@ async def on_message(message: discord.Message):
             os.system("cls")
             os.system("python main.py")
             sys.exit()
+        if (d == Command.langset):
+            data.ChangeLang(message.guild, message.content.split()[2])
+            lang = data.GetLang(message.guild)
+            title = "언어 변경 성공" if lang == "kor" else "Language change successful"
+            des = "eng => kor" if lang == "kor" else "kor => eng"
+            color = random.randint(0, 16777215)
+            await send(
+                embed=discord.Embed(title=title, description=des, color=color)
+            )
     except Exception as e:
         logger.error(str(e))
         return
@@ -114,6 +131,13 @@ async def on_guild_join(guild):
     color = random.randint(0, 1677215)
     await guild.owner.send(
         embed=discord.Embed(title=title, description=des, color=color)
+    )
+    await guild.owner.send(
+        embed=discord.Embed(
+            title="Language Setting / 언어 설정",
+            description=
+            f"ENG\nSet the bot's language to ~set lang <Language> command.\ncurrent bot's lang : {c}\n\nKOR\n봇의 언어를 ~set lang <언어> 커맨드로 설정해보세요.\n현재 봇의 언어 : {c}"
+        )
     )
     await client.get_guild(766164184060002314).get_channel(
         766164184060002317
