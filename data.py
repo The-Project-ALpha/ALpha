@@ -1,6 +1,7 @@
 import discord
 import json
 import os
+import asyncio
 
 
 class GuildData:
@@ -13,7 +14,7 @@ class GuildData:
         self.logch = logch
 
 
-def JoinGuild(guild: discord.Guild):
+def JoinGuild(client : discord.Client, guild: discord.Guild):
     path = f"./data/guilds/{guild.id}.json"
     region: discord.VoiceRegion = guild.region
     print(region)
@@ -24,6 +25,9 @@ def JoinGuild(guild: discord.Guild):
     print(json.dumps(data))
     with open(path, "w") as fp:
         fp.write(json.dumps(data))
+
+
+    return lang
 
 
 def LeaveGuild(guild: discord.Guild):
@@ -37,3 +41,10 @@ def GetLang(guild: discord.Guild) -> str:
         d = fp.read()
     g = json.loads(d)
     return g["lang"]
+
+
+def Check(client:discord.Client, guild: discord.Guild):
+    path = f"./data/guilds/{guild.id}.json"
+    if (os.path.isfile(path)):
+        return None
+    return JoinGuild(client, guild)
