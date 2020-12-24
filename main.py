@@ -7,6 +7,7 @@ import data
 import random
 import sys
 import logging
+import platform
 import subprocess
 
 from command import Command
@@ -113,6 +114,7 @@ async def on_message(message: discord.Message):
             color = random.randint(0, 16777215)
             await send(embed=discord.Embed(title=title, description=des, color=color))
             return
+
         if d == Command.restart:
             await send(
                 embed=discord.Embed(
@@ -122,6 +124,7 @@ async def on_message(message: discord.Message):
             os.system("cls")
             os.system("python main.py")
             sys.exit()
+
         if d == Command.langset:
             data.ChangeLang(message.guild, message.content.split()[2])
             lang = data.GetLang(message.guild)
@@ -129,6 +132,7 @@ async def on_message(message: discord.Message):
             des = "eng => kor" if lang == "kor" else "kor => eng"
             color = random.randint(0, 16777215)
             await send(embed=discord.Embed(title=title, description=des, color=color))
+
         if d == Command._exec:
             exec(
                 f"""
@@ -145,6 +149,20 @@ with open("data.txt", "w") as fp:
                 embed=discord.Embed(
                     title="Done",
                     description=f"```{d}```",
+                    color=random.randint(0, 16777215),
+                )
+            )
+
+        if d == Command.info:
+
+            await send(
+                embed=discord.Embed(
+                    title="정보" if lang == "kor" else "Information",
+                    description=(
+                        f"디스코드 모듈 버전 : {discord.__version__}\n파이썬 버전 : 3.7\n서버 : {platform.platform()}\n핑 : {client.latency*1000}"
+                        if lang == "kor"
+                        else f"Discord module's version : {discord.__version__}\npython version : 3.7\nServer : {platform.platform()}\nping : {client.latency*1000}"
+                    ),
                     color=random.randint(0, 16777215),
                 )
             )

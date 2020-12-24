@@ -9,6 +9,8 @@ class Command(Enum):
     restart = 4
     langset = 5
     _exec = 6
+    info = 7
+    
 
 
 def GetCommand(client: discord.client, msg: discord.Message) -> Command:
@@ -27,6 +29,8 @@ def GetCommand(client: discord.client, msg: discord.Message) -> Command:
         a += 1
     if mcl == "~restart" and msg.author.id == 418023987864403968:
         return Command.restart
+    if(mcl == "~info"):
+        return Command.info
     if mcsl[0] == "~exec" and msg.author.id == 418023987864403968:
         return Command._exec
     if mcl == "~hello":
