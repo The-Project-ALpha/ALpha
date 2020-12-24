@@ -10,7 +10,11 @@ class Command(Enum):
     langset = 5
     _exec = 6
     info = 7
-    
+
+    kick = 10
+    ban = 11
+    mute = 12
+    clear = 13
 
 
 def GetCommand(client: discord.client, msg: discord.Message) -> Command:
@@ -29,7 +33,7 @@ def GetCommand(client: discord.client, msg: discord.Message) -> Command:
         a += 1
     if mcl == "~restart" and msg.author.id == 418023987864403968:
         return Command.restart
-    if(mcl == "~info"):
+    if mcl == "~info":
         return Command.info
     if mcsl[0] == "~exec" and msg.author.id == 418023987864403968:
         return Command._exec
