@@ -44,4 +44,28 @@ def GetCommand(client: discord.client, msg: discord.Message) -> Command:
     ) and msg.author.guild_permissions.administrator:
         if mcsl[1] == "lang":
             return Command.langset
+    if (
+        mcsl[0] == "~kick"
+        and (not len(mcsl) == 1)
+        and msg.author.guild_permissions.kick_members
+    ):
+        return Command.kick
+    if (
+        mcsl[0] == "~ban"
+        and (not len(mcsl) == 1)
+        and msg.author.guild_permissions.ban_members
+    ):
+        return Command.ban
+    if (
+        mcsl[0] == "~mute"
+        and (not len(mcsl) == 1)
+        and msg.author.guild_permissions.manage_roles
+    ):
+        return Command.mute
+    if (
+        mcsl[0] == "~clear"
+        and (not len(mcsl) == 1)
+        and msg.author.guild_permissions.manage_messages
+    ):
+        return Command.clear
     return Command.none

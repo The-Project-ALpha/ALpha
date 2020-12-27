@@ -4,17 +4,7 @@ import os
 import asyncio
 
 
-class GuildData:
-    def __init__(self, region: discord.VoiceRegion, logch: int):
-        self.region = region
-        if region == discord.VoiceRegion.south_korea:
-            self.lang = "kor"
-        else:
-            self.lang = "eng"
-        self.logch = logch
-
-
-def JoinGuild(client: discord.Client, guild: discord.Guild):
+def join_guild(client: discord.Client, guild: discord.Guild):
     path = f"./data/guilds/{guild.id}.json"
     region: discord.VoiceRegion = guild.region
     lang = "eng"
@@ -26,12 +16,25 @@ def JoinGuild(client: discord.Client, guild: discord.Guild):
     return lang
 
 
-def LeaveGuild(guild: discord.Guild):
+def leave_guild(guild: discord.Guild):
     path = f"./data/guilds/{guild.id}.json"
     os.remove(path)
 
 
-def GetLang(guild: discord.Guild) -> str:
+def __get_json(id) -> dict:
+    path = f"./data/guilds/{id}.json"
+    with open(path, "r") as fp:
+        data = json.load(fp)
+    return data
+
+
+def __edit_json(id, af) -> None:
+    path = f"./data/guilds/{id}.json"
+    with open(path, "w") as fp:
+        fp.write(str(af))
+
+
+def get_language(guild: discord.Guild) -> str:
     path = f"./data/guilds/{guild.id}.json"
     with open(path, "r") as fp:
         d = fp.read()
@@ -39,15 +42,14 @@ def GetLang(guild: discord.Guild) -> str:
     return g["lang"]
 
 
-def Check(client: discord.Client, guild: discord.Guild):
+def check(client: discord.Client, guild: discord.Guild):
     path = f"./data/guilds/{guild.id}.json"
     if os.path.isfile(path):
         return None
-    return JoinGuild(client, guild)
+    return join_guild(client, guild)
 
 
-def ChangeLang(guild: discord.Guild, lang: str) -> None:
-    path = f"./data/guilds/{guild.id}.json"
+def change_lang(guild: discord.Guild, lang: str) -> None:
     l = lang.lower()
     l = (
         l.replace("korean", "kor")
@@ -58,16 +60,13 @@ def ChangeLang(guild: discord.Guild, lang: str) -> None:
     )
     if not l == "kor":
         l = "eng"
-    with open(path, "r") as fp:
-        d = fp.read()
-    g = json.loads(d)
+    g = __get_json(guild)
     g["lang"] = l
-    with open(path, "w") as fp:
-        fp.write(json.dumps(g))
+    __edit_json(guild.id, g)
     return
 
 
-def Traffic(member: discord.Member):
+def get_traffic(member: discord.Member):
     with open("./data/traffic/guilds.json", "r") as fp:
         g = json.load(fp)
     with open("./data/traffic/users.json", "r") as fp:
@@ -82,3 +81,7 @@ def Traffic(member: discord.Member):
         json.dump(g, fp)
     with open("./data/traffic/users.json", "w") as fp:
         json.dump(u, fp)
+
+
+def get_log_channel(id: int) -> int:
+    return __get_json(id)["logch"]

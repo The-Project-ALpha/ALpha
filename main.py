@@ -75,8 +75,8 @@ async def on_message(message: discord.Message):
     d = command.GetCommand(client, message)
     if d == Command.none:
         return
-    data.Traffic(message.author)
-    c = data.Check(client, message.guild)
+    data.get_traffic(message.author)
+    c = data.check(client, message.guild)
     if not c == None:
         title = "안녕하세요 👋" if c == "kor" else "Hi there 👋"
         des = (
@@ -103,7 +103,7 @@ async def on_message(message: discord.Message):
 
     try:
         send = message.channel.send
-        lang = data.GetLang(message.guild)
+        lang = data.get_language(message.guild)
         if d == Command.hello:
             title = "안녕하세요 👋" if lang == "kor" else "Hi there 👋"
             des = (
@@ -126,8 +126,8 @@ async def on_message(message: discord.Message):
             sys.exit()
 
         if d == Command.langset:
-            data.ChangeLang(message.guild, message.content.split()[2])
-            lang = data.GetLang(message.guild)
+            data.change_lang(message.guild, message.content.split()[2])
+            lang = data.get_language(message.guild)
             title = "언어 변경 성공" if lang == "kor" else "Language change successful"
             des = "eng => kor" if lang == "kor" else "kor => eng"
             color = random.randint(0, 16777215)
@@ -173,7 +173,7 @@ with open("data.txt", "w") as fp:
 
 @client.event
 async def on_guild_join(guild):
-    c = data.JoinGuild(client, guild)
+    c = data.join_guild(client, guild)
     title = "안녕하세요 👋" if c == "kor" else "Hi there 👋"
     des = (
         f"ALpha 봇을 `{guild.name}` 서버에 추가해 주셔서 감사합니다!\n~help 명령어로 열 수 있는 도움말을 참고해보세요!"
