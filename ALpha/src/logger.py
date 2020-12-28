@@ -3,7 +3,7 @@ import json
 import data
 
 
-def get_channel(guild: discord.Guild) -> tuple(discord.TextChannel, str):
+def get_channel(guild: discord.Guild):
     return guild.get_channel(data.get_log_channel(guild.id)), data.get_language(
         guild.id
     )

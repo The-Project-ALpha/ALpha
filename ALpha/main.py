@@ -1,15 +1,15 @@
-import discord
 import asyncio
 import datetime
+import discord
+import logging
 import os
+import platform
 import random
 import sys
-import logging
-import platform
 
+from src import command
 from src import data
 from src import logger
-from src import command
 
 from src.command import Command
 
@@ -36,7 +36,7 @@ logger.setLevel(logging.DEBUG)
 @client.event
 async def on_ready():
     logger.info(f"Log in")
-    logger.info(f"name : {client.user.name} , id : {client.user.name}")
+    logger.info(f"name : {client.user.name} , id : {client.user.id}")
 
     i = 0
 
@@ -88,78 +88,73 @@ async def on_message(message: discord.Message):
                 description=f"`{message.guild.name}`, 인원 {len(message.guild.members)}명",
             )
         )
-    try:
-        send = message.channel.send
+    send = message.channel.send
+    lang = data.get_language(message.guild.id)
+    """ 
+    ####################
+    #     Commands     #
+    ####################
+    """
+    if d == Command.hello:
+        emb = data.get_i18n(lang, "hello")
+        await send(
+            embed=discord.Embed(
+                title=emb["TITLE"],
+                description=emb["DESCRIPTION"],
+                color=random.randint(0, 16777215),
+            )
+        )
+        return
+    if d == Command.restart:
+        await send(
+            embed=discord.Embed(
+                title="restarting...", color=random.randint(0, 16777215)
+            )
+        )
+        os.system("cls")
+        os.system("python main.py")
+        sys.exit()
+    if d == Command.langset:
+        data.change_lang(message.guild, message.content.split()[2])
         lang = data.get_language(message.guild)
-
-        """ 
-        ####################
-        #     Commands     #
-        ####################
-        """
-        if d == Command.hello:
-            emb = data.get_i18n(lang, "hello")
-            await send(
-                embed=discord.Embed(
-                    title=emb["TITLE"],
-                    description=emb["DESCRIPTION"],
-                    color=random.randint(0, 16777215),
-                )
+        emb = data.get_i18n(lang, "langset")
+        await send(
+            embed=discord.Embed(
+                title=emb["TITLE"],
+                description=emb["DESCRIPTION"],
+                color=random.randint(0, 16777215),
             )
-            return
-        if d == Command.restart:
-            await send(
-                embed=discord.Embed(
-                    title="restarting...", color=random.randint(0, 16777215)
-                )
-            )
-            os.system("cls")
-            os.system("python main.py")
-            sys.exit()
-        if d == Command.langset:
-            data.change_lang(message.guild, message.content.split()[2])
-            lang = data.get_language(message.guild)
-            emb = data.get_i18n(lang, "langset")
-            await send(
-                embed=discord.Embed(
-                    title=emb["TITLE"],
-                    description=emb["DESCRIPTION"],
-                    color=random.randint(0, 16777215),
-                )
-            )
-        if d == Command._exec:
-            exec(
-                f"""
+        )
+    if d == Command._exec:
+        exec(
+            f"""
 {message.content[6:].replace("print(", "ex = (")}
 
 with open("data.txt", "w") as fp:
     fp.write(str(ex))
 """
+        )
+        with open("data.txt", "r") as fp:
+            d = fp.read()
+            d = "\n" + d
+        await send(
+            embed=discord.Embed(
+                title="Done",
+                description=f"```{d}```",
+                color=random.randint(0, 16777215),
             )
-            with open("data.txt", "r") as fp:
-                d = fp.read()
-                d = "\n" + d
-            await send(
-                embed=discord.Embed(
-                    title="Done",
-                    description=f"```{d}```",
-                    color=random.randint(0, 16777215),
-                )
+        )
+    if d == Command.info:
+        emb = data.get_i18n(lang, "info")
+        await send(
+            embed=discord.Embed(
+                title=emb["TITLE"],
+                description=emb["DESCRIPTION"].format(
+                    discord.__version__, platform.platform(), client.latency * 1000
+                ),
+                color=random.randint(0, 16777215),
             )
-        if d == Command.info:
-            emb = data.get_i18n(lang, "info")
-            await send(
-                embed=discord.Embed(
-                    title=emb["TITLE"],
-                    description=emb["DESCRIPTION"].format(
-                        discord.__version__, platform.platform(), client.laytency * 1000
-                    ),
-                    color=random.randint(0, 16777215),
-                )
-            )
-    except Exception as e:
-        logger.error(str(e))
-        return
+        )
 
 
 @client.event
