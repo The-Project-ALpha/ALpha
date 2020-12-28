@@ -3,6 +3,8 @@ import json
 import os
 import configparser
 
+config= configparser.ConfigParser()
+data = [config.read("./i18n/kor.ini"), config.read("./i18n/eng.ini")]
 
 def join_guild(guild: discord.Guild) -> str:
     path = f"./data/guilds/{guild.id}.json"
@@ -84,6 +86,5 @@ def get_log_channel(gid: int) -> int:
     return __get_json(gid)["logch"]
 
 def get_i18n(lang:str, d:str) -> dict:
-    config= configparser.ConfigParser()
-    data = config.read("./i18n/{0}.ini".format(lang))
-    return data[d]
+    global data
+    return data[0 if lang == "kor" else 1][d]
