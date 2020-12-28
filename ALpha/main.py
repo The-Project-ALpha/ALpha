@@ -100,7 +100,6 @@ async def on_message(message: discord.Message):
                 description=f"`{message.guild.name}`, 인원 {len(message.guild.members)}명",
             )
         )
-
     try:
         send = message.channel.send
         lang = data.get_language(message.guild)
@@ -114,7 +113,6 @@ async def on_message(message: discord.Message):
             color = random.randint(0, 16777215)
             await send(embed=discord.Embed(title=title, description=des, color=color))
             return
-
         if d == Command.restart:
             await send(
                 embed=discord.Embed(
@@ -124,7 +122,6 @@ async def on_message(message: discord.Message):
             os.system("cls")
             os.system("python main.py")
             sys.exit()
-
         if d == Command.langset:
             data.change_lang(message.guild, message.content.split()[2])
             lang = data.get_language(message.guild)
@@ -132,7 +129,6 @@ async def on_message(message: discord.Message):
             des = "eng => kor" if lang == "kor" else "kor => eng"
             color = random.randint(0, 16777215)
             await send(embed=discord.Embed(title=title, description=des, color=color))
-
         if d == Command._exec:
             exec(
                 f"""
@@ -152,7 +148,6 @@ with open("data.txt", "w") as fp:
                     color=random.randint(0, 16777215),
                 )
             )
-
         if d == Command.info:
 
             await send(
