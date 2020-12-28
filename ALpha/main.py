@@ -1,4 +1,5 @@
 import asyncio
+import atexit
 import datetime
 import discord
 import logging
@@ -41,6 +42,7 @@ async def on_ready():
     i = 0
 
     while True:
+        data.save()
         act = (
             discord.Game(
                 name=f"In service to {len(client.users)} users, {len(client.guilds)} guilds"
@@ -49,6 +51,7 @@ async def on_ready():
             else discord.Game(name=f"check help to mention me or type ~help")
         )
         i += 1
+        
         await client.change_presence(status=discord.Status.idle, activity=act)
         await asyncio.sleep(30)
 
@@ -111,12 +114,13 @@ async def on_message(message: discord.Message):
                 title="restarting...", color=random.randint(0, 16777215)
             )
         )
+        save()
         os.system("cls")
-        os.system("python main.py")
+        os.system("python ./ALpha/main.py")
         sys.exit()
     if d == Command.langset:
-        data.change_lang(message.guild, message.content.split()[2])
-        lang = data.get_language(message.guild)
+        data.change_lang(message.guild.id, message.content.split()[2])
+        lang = data.get_language(message.guild.id)
         emb = data.get_i18n(lang, "langset")
         await send(
             embed=discord.Embed(
@@ -182,6 +186,12 @@ async def on_guild_join(guild):
             description=f"`{guild.name}`, 인원 {len(guild.members)}명",
         )
     )
+
+def save():
+    data.save()
+atexit.register(save)
+
+
 
 
 client.run(os.environ["ALPHATOKEN"])
