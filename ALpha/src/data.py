@@ -1,9 +1,10 @@
 import discord
 import json
 import os
+import configparser
 
 
-def join_guild(guild: discord.Guild):
+def join_guild(guild: discord.Guild) -> str:
     path = f"./data/guilds/{guild.id}.json"
     region: discord.VoiceRegion = guild.region
     lang = "eng"
@@ -15,7 +16,7 @@ def join_guild(guild: discord.Guild):
     return lang
 
 
-def leave_guild(gid):
+def leave_guild(gid) -> None:
     path = f"./data/guilds/{gid}.json"
     os.remove(path)
 
@@ -37,7 +38,7 @@ def get_language(gid) -> str:
     return __get_json(gid)["lang"]
 
 
-def check(guild: discord.Guild):
+def check(guild: discord.Guild) -> str:
     path = f"./data/guilds/{guild.id}.json"
     if os.path.isfile(path):
         return None
@@ -61,7 +62,7 @@ def change_lang(gid, lang: str) -> None:
     return
 
 
-def set_traffic(member: discord.Member):
+def set_traffic(member: discord.Member) -> tuple(int, int):
     with open("./data/traffic/guilds.json", "r") as fp:
         g = json.load(fp)
     with open("./data/traffic/users.json", "r") as fp:
@@ -76,7 +77,13 @@ def set_traffic(member: discord.Member):
         json.dump(g, fp)
     with open("./data/traffic/users.json", "w") as fp:
         json.dump(u, fp)
+    return(g[str(member.guild.id)], u[str(member._user.id)])
 
 
 def get_log_channel(gid: int) -> int:
     return __get_json(gid)["logch"]
+
+def get_i18n(lang:str, d:str) -> dict:
+    config= configparser.ConfigParser()
+    data = config.read("./i18n/{0}.ini".format(lang))
+    return data[d]

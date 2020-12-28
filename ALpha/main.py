@@ -2,46 +2,38 @@ import discord
 import asyncio
 import datetime
 import os
-import command
-import data
 import random
 import sys
 import logging
 import platform
 
-from command import Command
+from src import data
+from src import logger
+from src import command
 
+from src.command import Command
+
+
+#client
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
-
-def __get_logger():
-
-    __logger = logging.getLogger("logger")
-
-    formatter = logging.Formatter(
-        "%(levelname)s | %(asctime)s << %(message)s >> at file::%(filename)s"
-    )
-
-    stream_handler = logging.StreamHandler()
-
-    stream_handler.setFormatter(formatter)
-
-    name = f"log/{datetime.datetime.now().strftime('%y-%m-%d-%H-%M-%S')}"
-
-    file_handler = logging.FileHandler(filename=f"{name}.log")
-
-    file_handler.setLevel(logging.INFO)
-
-    __logger.addHandler(file_handler)
-
-    __logger.addHandler(stream_handler)
-
-    __logger.setLevel(logging.DEBUG)
-    return __logger
+#logger
+logger = logging.getLogger("logger")
+formatter = logging.Formatter(
+    "%(levelname)s | %(asctime)s << %(message)s >> at file::%(filename)s"
+)
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(formatter)
+name = f"log/{datetime.datetime.now().strftime('%y-%m-%d-%H-%M-%S')}"
+file_handler = logging.FileHandler(filename=f"{name}.log")
+file_handler.setLevel(logging.INFO)
+logger.addHandler(file_handler)
+logger.addHandler(stream_handler)
+logger.setLevel(logging.DEBUG)
 
 
-logger = __get_logger()
+
 
 
 @client.event
@@ -74,8 +66,8 @@ async def on_message(message: discord.Message):
     d = command.GetCommand(client, message)
     if d == Command.none:
         return
-    data.get_traffic(message.author)
-    c = data.check(client, message.guild)
+    data.set_traffic(message.author)
+    c = data.check(message.guild)
     if not c == None:
         title = "안녕하세요 👋" if c == "kor" else "Hi there 👋"
         des = (
@@ -103,6 +95,7 @@ async def on_message(message: discord.Message):
         send = message.channel.send
         lang = data.get_language(message.guild)
         if d == Command.hello:
+            
             title = "안녕하세요 👋" if lang == "kor" else "Hi there 👋"
             des = (
                 "ALpha는 Project ALpha에서 개발한 서버 관리 봇입니다.\n자세한 내용은 ~help로 알아보세요!"
@@ -167,7 +160,7 @@ with open("data.txt", "w") as fp:
 
 @client.event
 async def on_guild_join(guild):
-    c = data.join_guild(client, guild)
+    c = data.join_guild(guild)
     title = "안녕하세요 👋" if c == "kor" else "Hi there 👋"
     des = (
         f"ALpha 봇을 `{guild.name}` 서버에 추가해 주셔서 감사합니다!\n~help 명령어로 열 수 있는 도움말을 참고해보세요!"
