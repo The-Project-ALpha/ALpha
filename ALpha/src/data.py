@@ -88,3 +88,5 @@ def get_log_channel(gid: int) -> int:
 def get_i18n(lang:str, d:str) -> dict:
     global data
     return data[0 if lang == "kor" else 1][d]
+
+

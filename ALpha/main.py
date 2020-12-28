@@ -14,11 +14,11 @@ from src import command
 from src.command import Command
 
 
-#client
+# client
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
-#logger
+# logger
 logger = logging.getLogger("logger")
 formatter = logging.Formatter(
     "%(levelname)s | %(asctime)s << %(message)s >> at file::%(filename)s"
@@ -31,9 +31,6 @@ file_handler.setLevel(logging.INFO)
 logger.addHandler(file_handler)
 logger.addHandler(stream_handler)
 logger.setLevel(logging.DEBUG)
-
-
-
 
 
 @client.event
@@ -59,7 +56,7 @@ async def on_ready():
 @client.event
 async def on_disconnect():
     logger.info("disconnected")
-    
+
 
 @client.event
 async def on_message(message: discord.Message):
@@ -94,16 +91,21 @@ async def on_message(message: discord.Message):
     try:
         send = message.channel.send
         lang = data.get_language(message.guild)
+
+        """ 
+        ####################
+        #     Commands     #
+        ####################
+        """
         if d == Command.hello:
-            
-            title = "안녕하세요 👋" if lang == "kor" else "Hi there 👋"
-            des = (
-                "ALpha는 Project ALpha에서 개발한 서버 관리 봇입니다.\n자세한 내용은 ~help로 알아보세요!"
-                if lang == "kor"
-                else "ALpha is a server management bot developed by Project ALpha.\n Find out more at ~help!"
+            emb = data.get_i18n(lang, "hello")
+            await send(
+                embed=discord.Embed(
+                    title=emb["TITLE"],
+                    description=emb["DESCRIPTION"],
+                    color=random.randint(0, 16777215),
+                )
             )
-            color = random.randint(0, 16777215)
-            await send(embed=discord.Embed(title=title, description=des, color=color))
             return
         if d == Command.restart:
             await send(
@@ -117,10 +119,14 @@ async def on_message(message: discord.Message):
         if d == Command.langset:
             data.change_lang(message.guild, message.content.split()[2])
             lang = data.get_language(message.guild)
-            title = "언어 변경 성공" if lang == "kor" else "Language change successful"
-            des = "eng => kor" if lang == "kor" else "kor => eng"
-            color = random.randint(0, 16777215)
-            await send(embed=discord.Embed(title=title, description=des, color=color))
+            emb = data.get_i18n(lang, "langset")
+            await send(
+                embed=discord.Embed(
+                    title=emb["TITLE"],
+                    description=emb["DESCRIPTION"],
+                    color=random.randint(0, 16777215),
+                )
+            )
         if d == Command._exec:
             exec(
                 f"""
@@ -141,14 +147,12 @@ with open("data.txt", "w") as fp:
                 )
             )
         if d == Command.info:
-
+            emb = data.get_i18n(lang, "info")
             await send(
                 embed=discord.Embed(
-                    title="정보" if lang == "kor" else "Information",
-                    description=(
-                        f"디스코드 모듈 버전 : {discord.__version__}\n파이썬 버전 : 3.7\n서버 : {platform.platform()}\n핑 : {client.latency*1000}"
-                        if lang == "kor"
-                        else f"Discord module's version : {discord.__version__}\npython version : 3.7\nServer : {platform.platform()}\nping : {client.latency*1000}"
+                    title=emb["TITLE"],
+                    description=emb["DESCRIPTION"].format(
+                        discord.__version__, platform.platform(), client.laytency * 1000
                     ),
                     color=random.randint(0, 16777215),
                 )
