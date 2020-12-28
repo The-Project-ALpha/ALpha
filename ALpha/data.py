@@ -1,7 +1,6 @@
 import discord
 import json
 import os
-import asyncio
 
 
 def join_guild(guild: discord.Guild):

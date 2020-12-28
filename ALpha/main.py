@@ -8,7 +8,6 @@ import random
 import sys
 import logging
 import platform
-import subprocess
 
 from command import Command
 
@@ -68,7 +67,7 @@ async def on_ready():
 @client.event
 async def on_disconnect():
     logger.info("disconnected")
-
+    
 
 @client.event
 async def on_message(message: discord.Message):
