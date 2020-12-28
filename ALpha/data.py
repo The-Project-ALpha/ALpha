@@ -70,6 +70,7 @@ def set_traffic(member: discord.Member):
     if not str(member.guild.id) in g:
         g[str(member.guild.id)] = 0
     if not str(member._user.id) in u:
+    g[str(member.guild.id)] += 1
     u[str(member._user.id)] += 1
     with open("./data/traffic/guilds.json", "w") as fp:
         json.dump(g, fp)
