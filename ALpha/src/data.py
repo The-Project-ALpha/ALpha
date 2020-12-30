@@ -83,7 +83,7 @@ def get_i18n(lang: str, d: str) -> dict:
     global kor, eng
     dt = (kor if lang == "kor" else eng)[d]
     for k, v in dt.items():
-        dt[k] = v.replace("[enter]", "\n")
+        dt[k] = v.replace("[enter]", "\n").replace("[s]", "'").replace("[sh]", "#")
     return dt
 
 def save():

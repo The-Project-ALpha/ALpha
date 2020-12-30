@@ -7,6 +7,7 @@ import os
 import platform
 import random
 import sys
+import re
 
 from src import command
 from src import data
@@ -51,7 +52,7 @@ async def on_ready():
             else discord.Game(name=f"check help to mention me or type ~help")
         )
         i += 1
-        
+
         await client.change_presence(status=discord.Status.idle, activity=act)
         await asyncio.sleep(30)
 
@@ -64,7 +65,7 @@ async def on_disconnect():
 @client.event
 async def on_message(message: discord.Message):
     d = command.GetCommand(client, message)
-    if d == Command.none:
+    if d == Command.NONE:
         return
     data.set_traffic(message.author)
     c = data.check(message.guild)
@@ -98,7 +99,7 @@ async def on_message(message: discord.Message):
     #     Commands     #
     ####################
     """
-    if d == Command.hello:
+    if d == Command.HELLO:
         emb = data.get_i18n(lang, "hello")
         await send(
             embed=discord.Embed(
@@ -108,7 +109,7 @@ async def on_message(message: discord.Message):
             )
         )
         return
-    if d == Command.restart:
+    if d == Command.RESTART:
         await send(
             embed=discord.Embed(
                 title="restarting...", color=random.randint(0, 16777215)
@@ -118,7 +119,7 @@ async def on_message(message: discord.Message):
         os.system("cls")
         os.system("python ./ALpha/main.py")
         sys.exit()
-    if d == Command.langset:
+    if d == Command.LANGSET:
         data.change_lang(message.guild.id, message.content.split()[2])
         lang = data.get_language(message.guild.id)
         emb = data.get_i18n(lang, "langset")
@@ -129,7 +130,7 @@ async def on_message(message: discord.Message):
                 color=random.randint(0, 16777215),
             )
         )
-    if d == Command._exec:
+    if d == Command.EXEC:
         exec(
             f"""
 {message.content[6:].replace("print(", "ex = (")}
@@ -148,7 +149,7 @@ with open("data.txt", "w") as fp:
                 color=random.randint(0, 16777215),
             )
         )
-    if d == Command.info:
+    if d == Command.INFO:
         emb = data.get_i18n(lang, "info")
         await send(
             embed=discord.Embed(
@@ -157,6 +158,51 @@ with open("data.txt", "w") as fp:
                     discord.__version__, platform.platform(), client.latency * 1000
                 ),
                 color=random.randint(0, 16777215),
+            )
+        )
+    if d == Command.KICK:
+        if not message.author.guild_permissions.kick_members:
+            emb = data.get_i18n(lang, "kickf")
+            await send(
+                embed=discord.Embed(
+                    title=emb["TITLE"],
+                    description=emb["DESCRIPTION"],
+                    color=random.randint(0, 16777215),
+                )
+            )
+            return
+        user: discord.Member = message.guild.get_member(
+            int("".join(map(str, re.findall(r"\d", message.content.split()[1]))))
+        )
+        ra: discord.Role = message.author.roles[-1]
+        ru: discord.Role = user.roles[-1]
+
+        if ra.position <= ru.position:
+            emb = data.get_i18n(lang, "kickr")
+            await send(
+                embed=discord.Embed(
+                    title=emb["TITLE"],
+                    description=emb["DESCRIPTION"],
+                    color=random.randint(0, 1677215),
+                )
+            )
+            return
+        reason = " ".join(message.content.split()[2:])
+        emb = data.get_i18n(lang, "kicku")
+        await user.send(
+            embed=discord.Embed(
+                title=emb["TITLE"].format(message.guild.name),
+                description=emb["DESCRIPTION"].format(reason),
+                color=random.randint(0, 1677215),
+            )
+        )
+        await message.guild.kick(user, reason=reason)
+        emb = data.get_i18n(lang, "kicks")
+        await send(
+            embed=discord.Embed(
+                title=emb["TITLE"],
+                description=emb["DESCRIPTION"].format(user.name, user._user.id, user._user.discriminator),
+                color=random.randint(0, 1677215),
             )
         )
 
@@ -187,11 +233,10 @@ async def on_guild_join(guild):
         )
     )
 
+
 def save():
     data.save()
+
+
 atexit.register(save)
-
-
-
-
 client.run(os.environ["ALPHATOKEN"])
