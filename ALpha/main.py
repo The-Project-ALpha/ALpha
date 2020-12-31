@@ -264,5 +264,124 @@ def save():
     data.save()
 
 
+@client.event
+async def on_message_delete(msg: discord.Message):
+    pass
+
+
+@client.event
+async def on_bulk_message_delete(msgs: discord.Reaction):
+    pass
+
+
+@client.event
+async def on_message_edit(bf: discord.Message, af: discord.Message):
+    pass
+
+
+@client.event
+async def on_reaction_add(react: discord.Reaction, user: discord.Member):
+    pass
+
+
+@client.event
+async def on_reaction_remove(react: discord.Reaction, user: discord.Member):
+    pass
+
+
+@client.event
+async def on_reaction_clear(msg: discord.Message, reacts: discord.Reaction):
+    pass
+
+
+@client.event
+async def on_reaction_clear_emoji(react: discord.Reaction):
+    pass
+
+
+@client.event
+async def on_guild_channel_delete(ch):
+    pass
+
+
+@client.event
+async def on_guild_channel_create(ch):
+    pass
+
+
+@client.event
+async def on_guild_channel_update(bf, af):
+    pass
+
+
+@client.event
+async def on_member_join(member: discord.Member):
+    pass
+
+
+@client.event
+async def on_member_remove(member: discord.Member):
+    pass
+
+
+@client.event
+async def on_member_update(bf: discord.Member, af: discord.Member):
+    pass
+
+
+@client.event
+async def on_guild_update(bf: discord.Guild, af: discord.Guild):
+    pass
+
+
+@client.event
+async def on_guild_role_create(role: discord.Role):
+    pass
+
+
+@client.event
+async def on_guild_role_delete(role: discord.Role):
+    pass
+
+
+@client.event
+async def on_guild_role_update(bf: discord.Role, af: discord.Role):
+    pass
+
+
+@client.event
+async def on_guild_emojis_update(
+    guild: discord.Guild, bf: discord.Emoji, af: discord.Emoji
+):
+    pass
+
+
+@client.event
+async def on_voice_state_update(
+    member: discord.Member, bf: discord.VoiceState, af: discord.VoiceState
+):
+    pass
+
+
+@client.event
+async def on_member_ban(guild: discord.Guild, member: discord.Member):
+    pass
+
+
+@client.event
+async def on_member_unban(guild: discord.Guild, member: discord.user):
+    pass
+
+
+@client.event
+async def on_invite_create(invite: discord.Invite):
+    pass
+
+
+@client.event
+async def on_invite_delete(invite: discord.Invite):
+    pass
+
+
 atexit.register(save)
 client.run(os.environ["ALPHATOKEN"])
