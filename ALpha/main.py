@@ -35,6 +35,17 @@ logger.addHandler(stream_handler)
 logger.setLevel(logging.DEBUG)
 
 
+async def send_emb(lang, t, ch) -> None:
+    emb = data.get_i18n(lang, t)
+    await ch.send(
+        embed=discord.Embed(
+            title=emb["TITLE"],
+            description=emb["DESCRIPTION"],
+            color=random.randint(0, 1677215),
+        )
+    )
+
+
 @client.event
 async def on_ready():
     logger.info(f"Log in")
@@ -100,14 +111,7 @@ async def on_message(message: discord.Message):
     ####################
     """
     if d == Command.HELLO:
-        emb = data.get_i18n(lang, "hello")
-        await send(
-            embed=discord.Embed(
-                title=emb["TITLE"],
-                description=emb["DESCRIPTION"],
-                color=random.randint(0, 16777215),
-            )
-        )
+        await send_emb(lang, "hello", message.channel)
         return
     if d == Command.RESTART:
         await send(
@@ -122,14 +126,7 @@ async def on_message(message: discord.Message):
     if d == Command.LANGSET:
         data.change_lang(message.guild.id, message.content.split()[2])
         lang = data.get_language(message.guild.id)
-        emb = data.get_i18n(lang, "langset")
-        await send(
-            embed=discord.Embed(
-                title=emb["TITLE"],
-                description=emb["DESCRIPTION"],
-                color=random.randint(0, 16777215),
-            )
-        )
+        await send_emb(lang, "langset", message.channel)
     if d == Command.EXEC:
         exec(
             f"""
@@ -162,30 +159,20 @@ with open("data.txt", "w") as fp:
         )
     if d == Command.KICK:
         if not message.author.guild_permissions.kick_members:
-            emb = data.get_i18n(lang, "kickf")
-            await send(
-                embed=discord.Embed(
-                    title=emb["TITLE"],
-                    description=emb["DESCRIPTION"],
-                    color=random.randint(0, 16777215),
-                )
-            )
+            await send_emb(lang, "kickf", message.channel)
             return
         user: discord.Member = message.guild.get_member(
             int("".join(map(str, re.findall(r"\d", message.content.split()[1]))))
         )
-        ra: discord.Role = message.author.roles[-1]
-        ru: discord.Role = user.roles[-1]
 
-        if ra.position <= ru.position:
-            emb = data.get_i18n(lang, "kickr")
-            await send(
-                embed=discord.Embed(
-                    title=emb["TITLE"],
-                    description=emb["DESCRIPTION"],
-                    color=random.randint(0, 1677215),
-                )
-            )
+        if message.author.roles[-1].position <= user.roles[-1].position:
+            await send_emb(lang, "kickr", message.channel)
+            return
+        if not message.guild.me.guild_permissions.kick_members:
+            await send_emb(lang, "kicka", message.channel)
+            return
+        if user.roles[-1].position > message.guild.me.roles[-1].position:
+            await send_emb(lang, "kickp", message.channel)
             return
         reason = " ".join(message.content.split()[2:])
         emb = data.get_i18n(lang, "kicku")
@@ -201,7 +188,46 @@ with open("data.txt", "w") as fp:
         await send(
             embed=discord.Embed(
                 title=emb["TITLE"],
-                description=emb["DESCRIPTION"].format(user.name, user._user.id, user._user.discriminator),
+                description=emb["DESCRIPTION"].format(
+                    user.name, user._user.id, user._user.discriminator
+                ),
+                color=random.randint(0, 1677215),
+            )
+        )
+    if d == Command.BAN:
+        if not message.author.guild_permissions.ban_members:
+            await send_emb(lang, "banf", message.channel)
+            return
+        user: discord.Member = message.guild.get_member(
+            int("".join(map(str, re.findall(r"\d", message.content.split()[1]))))
+        )
+
+        if message.author.roles[-1].position <= user.roles[-1].position:
+            await send_emb(lang, "banr", message.channel)
+            return
+        if not message.guild.me.guild_permissions.ban_members:
+            await send_emb(lang, "bana", message.channel)
+            return
+        if user.roles[-1].position > message.guild.me.roles[-1].position:
+            await send_emb(lang, "banp", message.channel)
+            return
+        reason = " ".join(message.content.split()[2:])
+        emb = data.get_i18n(lang, "banu")
+        await user.send(
+            embed=discord.Embed(
+                title=emb["TITLE"].format(message.guild.name),
+                description=emb["DESCRIPTION"].format(reason),
+                color=random.randint(0, 1677215),
+            )
+        )
+        await message.guild.ban(user, reason=reason)
+        emb = data.get_i18n(lang, "bans")
+        await send(
+            embed=discord.Embed(
+                title=emb["TITLE"],
+                description=emb["DESCRIPTION"].format(
+                    user.name, user._user.id, user._user.discriminator
+                ),
                 color=random.randint(0, 1677215),
             )
         )
