@@ -382,6 +382,15 @@ async def on_invite_create(invite: discord.Invite):
 async def on_invite_delete(invite: discord.Invite):
     pass
 
+@client.event
+async def on_raw_message_delete(payload):
+    pass
+@client.event
+async def on_raw_bulk_message_delete(payload):
+    pass
+
+
+
 
 atexit.register(save)
 client.run(os.environ["ALPHATOKEN"])

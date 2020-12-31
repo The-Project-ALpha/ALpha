@@ -2,7 +2,6 @@ import discord
 import json
 import os
 import configparser
-import atexit
 
 
 tg = dict
