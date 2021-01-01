@@ -149,7 +149,7 @@ def guild_emojis_update(guild:discord.Guild, before:discord.Emoji, after:discord
         color=random.randint(0, 1677215),
     )
 def voice_state_update(member:discord.Member, before:discord.VoiceState, after:discord.VoiceState):
-    emb = data.get_i18n(data.get_language(guild.id), "lvsu")
+    emb = data.get_i18n(data.get_language(member.id), "lvsu")
     return embed(
         title=emb["TITLE"],
         description=emb["DESCRIPTION"],
