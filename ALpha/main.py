@@ -270,7 +270,7 @@ async def on_message_delete(msg: discord.Message):
 
 
 @client.event
-async def on_bulk_message_delete(msgs: discord.Reaction):
+async def on_bulk_message_delete(msgs: discord.Message):
     pass
 
 
@@ -293,10 +293,6 @@ async def on_reaction_remove(react: discord.Reaction, user: discord.Member):
 async def on_reaction_clear(msg: discord.Message, reacts: discord.Reaction):
     pass
 
-
-@client.event
-async def on_reaction_clear_emoji(react: discord.Reaction):
-    pass
 
 
 @client.event
