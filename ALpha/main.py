@@ -36,7 +36,7 @@ logger.setLevel(logging.DEBUG)
 
 
 async def send_emb(lang, t, ch) -> None:
-    emb = data.get_i18n(lang, t)
+    emb = data.get_i18n(lang, t)    
     await ch.send(
         embed=discord.Embed(
             title=emb["TITLE"],
@@ -382,12 +382,36 @@ async def on_invite_create(invite: discord.Invite):
 async def on_invite_delete(invite: discord.Invite):
     pass
 
+
 @client.event
 async def on_raw_message_delete(payload):
     pass
+
+
 @client.event
 async def on_raw_bulk_message_delete(payload):
     pass
+
+@client.event
+async def on_raw_message_edit(payload):
+    pass
+
+@client.event
+async def on_raw_reaction_add(payload):
+    pass
+
+@client.event
+async def on_raw_reaction_remove(payload):
+    pass
+
+@client.event
+async def on_raw_reaction_clear(payload):
+    pass
+
+@client.event
+async def on_raw_reaction_clear_emoji(payload):
+    pass
+
 
 
 

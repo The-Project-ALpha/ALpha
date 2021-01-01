@@ -13,9 +13,19 @@ def get_channel(guild: discord.Guild):
 embed = discord.Embed
 
 
+
+def message_delete(message) -> discord.Embed:
+    lang = data.get_language(message.guild.id)
+    emb = data.get_i18n(lang, "lmd")
+    return embed(
+        title=emb["TITLE"],
+        description = ""
+    )
+
+
 def member_join(guild, member) -> discord.Embed:
     lang = data.get_language(guild.id)
-    emb = data.get_i18n(lang, "l_join")
+    emb = data.get_i18n(lang, "luj")
     return embed(
         title=emb["TITLE"],
         description=emb["DESCRIPTION"].format(),
