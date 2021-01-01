@@ -4,10 +4,8 @@ import random
 import data
 
 
-def get_channel(guild: discord.Guild):
-    return guild.get_channel(data.get_log_channel(guild.id)), data.get_language(
-        guild.id
-    )
+def get_channel(guild: discord.Guild) -> discord.TextChannel:
+    return guild.get_channel(data.get_log_channel(guild.id))
 
 
 embed = discord.Embed
@@ -17,7 +15,7 @@ def message_delete(message: discord.Message) -> discord.Embed:
     emb = data.get_i18n(data.get_language(message.guild.id), "lmd")
     return embed(
         title=emb["TITLE"],
-        description="",
+        description=emb["DESCRIPTION"],
         color=random.randint(0, 1677215),
     )
 
@@ -26,7 +24,7 @@ def bulk_message_delete(messages: discord.Message) -> discord.Embed:
     emb = data.get_i18n(data.get_language(messages[0].guild.id), "lbmd")
     return embed(
         title=emb["TITLE"],
-        description="",
+        description=emb["DESCRIPTION"],
         color=random.randint(0, 1677215),
     )
 

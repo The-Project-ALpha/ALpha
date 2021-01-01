@@ -1,4 +1,9 @@
 {
     "editor.formatOnSave": true,
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "discord.detailsDebugging": "{filename} 돌리는중 - {filesize}",
+    "discord.detailsEditing": "{filename} - {filesize}",
+    "discord.lowerDetailsIdle": "노는중",
+    "discord.lowerDetailsNotFound": "워크스페이스가 없다고?",
+    "discord.smallImage": "육안상의 영화사 암호로 하다"
 }

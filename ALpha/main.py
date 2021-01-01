@@ -11,7 +11,7 @@ import re
 
 from src import command
 from src import data
-from src import logger
+from src import log
 
 from src.command import Command
 
@@ -36,7 +36,7 @@ logger.setLevel(logging.DEBUG)
 
 
 async def send_emb(lang, t, ch) -> None:
-    emb = data.get_i18n(lang, t)    
+    emb = data.get_i18n(lang, t)
     await ch.send(
         embed=discord.Embed(
             title=emb["TITLE"],
@@ -266,12 +266,12 @@ def save():
 
 @client.event
 async def on_message_delete(msg: discord.Message):
-    pass
+    await log.get_channel(msg.guild).send(embed=log.message_delete(msg))
 
 
 @client.event
 async def on_bulk_message_delete(msgs: discord.Message):
-    pass
+    await log.get_channel(msgs[0].guild).send(embed=log.bulk_message_delete(msgs))
 
 
 @client.event
@@ -292,7 +292,6 @@ async def on_reaction_remove(react: discord.Reaction, user: discord.Member):
 @client.event
 async def on_reaction_clear(msg: discord.Message, reacts: discord.Reaction):
     pass
-
 
 
 @client.event
@@ -388,28 +387,30 @@ async def on_raw_message_delete(payload):
 async def on_raw_bulk_message_delete(payload):
     pass
 
+
 @client.event
 async def on_raw_message_edit(payload):
     pass
+
 
 @client.event
 async def on_raw_reaction_add(payload):
     pass
 
+
 @client.event
 async def on_raw_reaction_remove(payload):
     pass
+
 
 @client.event
 async def on_raw_reaction_clear(payload):
     pass
 
+
 @client.event
 async def on_raw_reaction_clear_emoji(payload):
     pass
-
-
-
 
 
 atexit.register(save)
