@@ -16,6 +16,8 @@ class Command(Enum):
     MUTE = 12
     CLEAR = 13
 
+    BLACKLIST = 20
+
 
 def GetCommand(client: discord.client, msg: discord.Message) -> Command:
     if msg.content == client.user.mention or msg.content == "~help":
@@ -67,4 +69,6 @@ def GetCommand(client: discord.client, msg: discord.Message) -> Command:
         and msg.author.guild_permissions.manage_messages
     ):
         return Command.CLEAR
+    if(mcl == "~black list"):
+        return Command.BLACKLIST
     return Command.NONE

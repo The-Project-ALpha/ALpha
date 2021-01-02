@@ -1,3 +1,4 @@
+import csv
 import discord
 import json
 import os
@@ -7,19 +8,20 @@ import configparser
 tg = dict
 tu = dict
 guild_json = dict
+black = dict
 
-with open("./ALpha/data/traffic/guilds.json", "r") as fp:
+with open("./ALpha/data/traffic/guilds.json", "r", encoding="UTF8") as fp:
     tg = json.load(fp)
-with open("./ALpha/data/traffic/users.json", "r") as fp:
+with open("./ALpha/data/traffic/users.json", "r", encoding="UTF8") as fp:
     tu = json.load(fp)
-with open("./ALpha/data/guilds.json", "r") as fp:
+with open("./ALpha/data/guilds.json", "r", encoding="UTF8") as fp:
     guild_json = json.load(fp)
-
+with open("./ALpha/data/black.json", "r", encoding="UTF8") as fp:
+    black = json.load(fp)
 kor = configparser.ConfigParser()
 eng = configparser.ConfigParser()
 kor.read("./ALpha/config/i18n/kor.ini", encoding="utf-8")
 eng.read("./ALpha/config/i18n/eng.ini", encoding="utf-8")
-
 
 
 def join_guild(guild: discord.Guild) -> str:
@@ -28,7 +30,7 @@ def join_guild(guild: discord.Guild) -> str:
     lang = "eng"
     if region == discord.VoiceRegion.south_korea:
         lang = "kor"
-    guild_json[str(guild.id)] = {"lang": lang, "logch": 0}
+    guild_json[str(guild.id)] = {"lang": lang, "logch": 0, "black": False}
     return lang
 
 
@@ -85,12 +87,51 @@ def get_i18n(lang: str, d: str) -> dict:
         dt[k] = v.replace("[enter]", "\n").replace("[s]", "'").replace("[sh]", "#")
     return dt
 
+
+def is_black_on(gid: int) -> bool:
+    return guild_json[str(gid)]["black"]
+
+
+def is_in_black(uid: int) -> bool:
+    return str(uid) in black
+
+
+def add_black(uid: int, reason: str, reporter: int) -> None:
+    black[str(uid)] = {"reason": reason, "reporter": reporter}
+
+
+def get_black_reason(uid: int) -> str:
+    return black[str(uid)]["reason"]
+
+
 def save():
-    global tg, tu, guild_json
     print("Save")
-    with open("./ALpha/data/traffic/guilds.json", "w") as fp:
-        json.dump(tg, fp)
-    with open("./ALpha/data/traffic/users.json", "w") as fp:
-        json.dump(tu, fp)
-    with open("./ALpha/data/guilds.json", "w") as fp:
-        json.dump(guild_json, fp)
+    with open("./ALpha/data/traffic/guilds.json", "w") as traffic_guild, open(
+        "./ALpha/data/traffic/users.json", "w"
+    ) as traffic_user, open("./ALpha/data/guilds.json", "w") as guild_data, open(
+        "./ALpha/data/black.json", "w"
+    ) as blacklist, open(
+        "./ALpha/data/black.txt", "w"
+    ) as black_readable:
+        json.dump(tg, traffic_guild)
+        json.dump(tu, traffic_user)
+        json.dump(guild_json, guild_data)
+        json.dump(black, blacklist)
+        data = ""
+        for key, value in black.items():
+            data += f"================\nid:{key}\nreason:{value['reason']}\nreporter:{value['reporter']}\n================\n\n\n\n"
+        black_readable.write(data)
+
+
+def change_black_into_readable():
+    data = ""
+    for key, value in black.items():
+        data += f"================\nid:{key}\nreason:{value['reason']}\nreporter:{value['reporter']}\n================\n\n\n\n"
+    with open("./ALpha/data/black.txt", "w") as fp:
+        fp.write(data)
+    return
+
+
+if __name__ == "__main__":
+    change_black_into_readable()
+save()

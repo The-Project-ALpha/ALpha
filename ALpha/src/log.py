@@ -76,77 +76,105 @@ def guild_channel_delete(channel: discord.abc.GuildChannel) -> discord.Embed:
         description=emb["DESCRIPTION"],
         color=random.randint(0, 1677215),
     )
-def guild_channel_create(channel:discord.abc.GuildChannel) -> discord.Embed:
+
+
+def guild_channel_create(channel: discord.abc.GuildChannel) -> discord.Embed:
     emb = data.get_i18n(data.get_language(channel.guild.id), "lgcc")
     return embed(
         title=emb["TITLE"],
         description=emb["DESCRIPTION"],
         color=random.randint(0, 1677215),
     )
-def guild_channel_update(before:discord.abc.GuildChannel, aefore:discord.abc.GuildChannel) -> discord.Embed:
+
+
+def guild_channel_update(
+    before: discord.abc.GuildChannel, aefore: discord.abc.GuildChannel
+) -> discord.Embed:
     emb = data.get_i18n(data.get_language(before.guild.id), "lgcu")
     return embed(
         title=emb["TITLE"],
         description=emb["DESCRIPTION"],
         color=random.randint(0, 1677215),
     )
-def member_join(member:discord.Member):
+
+
+def member_join(member: discord.Member):
     emb = data.get_i18n(data.get_language(member.guild.id), "lmj")
     return embed(
         title=emb["TITLE"],
         description=emb["DESCRIPTION"],
         color=random.randint(0, 1677215),
     )
-def member_remove(member:discord.Member):
+
+
+def member_remove(member: discord.Member):
     emb = data.get_i18n(data.get_language(member.guild.id), "lmr")
     return embed(
         title=emb["TITLE"],
         description=emb["DESCRIPTION"],
         color=random.randint(0, 1677215),
     )
-def member_update(before:discord.Member, after:discord.Member):
+
+
+def member_update(before: discord.Member, after: discord.Member):
     emb = data.get_i18n(data.get_language(before.guild.id), "lmu")
     return embed(
         title=emb["TITLE"],
         description=emb["DESCRIPTION"],
         color=random.randint(0, 1677215),
     )
-def guild_update(before:discord.Guild, after:discord.Guild):
+
+
+def guild_update(before: discord.Guild, after: discord.Guild):
     emb = data.get_i18n(data.get_language(before.guild.id), "lgu")
     return embed(
         title=emb["TITLE"],
         description=emb["DESCRIPTION"],
         color=random.randint(0, 1677215),
     )
-def guild_role_create(role:discord.Role):
+
+
+def guild_role_create(role: discord.Role):
     emb = data.get_i18n(data.get_language(role.guild.id), "lgrc")
     return embed(
         title=emb["TITLE"],
         description=emb["DESCRIPTION"],
         color=random.randint(0, 1677215),
     )
-def guild_role_delete(role:discord.Role):
+
+
+def guild_role_delete(role: discord.Role):
     emb = data.get_i18n(data.get_language(role.guild.id), "lgrd")
     return embed(
         title=emb["TITLE"],
         description=emb["DESCRIPTION"],
         color=random.randint(0, 1677215),
     )
-def guild_role_update(before:discord.Role, after:discord.Role):
+
+
+def guild_role_update(before: discord.Role, after: discord.Role):
     emb = data.get_i18n(data.get_language(before.guild.id), "lgrd")
     return embed(
         title=emb["TITLE"],
         description=emb["DESCRIPTION"],
         color=random.randint(0, 1677215),
     )
-def guild_emojis_update(guild:discord.Guild, before:discord.Emoji, after:discord.Emoji):
+
+
+def guild_emojis_update(
+    guild: discord.Guild, before: discord.Emoji, after: discord.Emoji
+):
     emb = data.get_i18n(data.get_language(guild.id), "lgeu")
     return embed(
         title=emb["TITLE"],
         description=emb["DESCRIPTION"],
         color=random.randint(0, 1677215),
     )
-def voice_state_update(member:discord.Member, before:discord.VoiceState, after:discord.VoiceState):
+
+
+def voice_state_update(
+    member: discord.Member, before: discord.VoiceState, after: discord.VoiceState
+):
     emb = data.get_i18n(data.get_language(member.id), "lvsu")
     return embed(
         title=emb["TITLE"],

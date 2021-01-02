@@ -54,7 +54,6 @@ async def on_ready():
     i = 0
 
     while True:
-        data.save()
         act = (
             discord.Game(
                 name=f"In service to {len(client.users)} users, {len(client.guilds)} guilds"
@@ -65,7 +64,9 @@ async def on_ready():
         i += 1
 
         await client.change_presence(status=discord.Status.idle, activity=act)
-        await asyncio.sleep(30)
+        await asyncio.sleep(60)
+
+        data.save()
 
 
 @client.event
@@ -231,6 +232,12 @@ with open("data.txt", "w") as fp:
                 color=random.randint(0, 1677215),
             )
         )
+    if d == Command.BLACKLIST:
+        print("진입")
+        with open("./ALpha/data/black.txt", "r") as fp:
+            await send("alskdjf")
+            await send(file=discord.File(fp=fp, filename="black.txt"))
+        await send("adsf")
 
 
 @client.event
@@ -311,7 +318,20 @@ async def on_guild_channel_update(bf, af):
 
 @client.event
 async def on_member_join(member: discord.Member):
-    pass
+    if data.is_black_on(member.guild.id):
+        if data.is_in_black(member._user.id):
+            emb = data.get_i18n(data.get_language(member.guild.id), "blackk")
+            await member.guild.owner.send(
+                embed=discord.Embed(
+                    title=emb["TITLE"],
+                    description=emb["DESCRIPTION"].format(
+                        f"{member._user.name}#{member._user.discriminator}",
+                        data.get_black_reason(member._user.id),
+                    ),
+                    color=random.randint(0, 1677215),
+                )
+            )
+            await member.guild.ban(member)
 
 
 @client.event
