@@ -127,6 +127,7 @@ async def on_message(message: discord.Message):
         data.change_lang(message.guild.id, message.content.split()[2])
         lang = data.get_language(message.guild.id)
         await send_emb(lang, "langset", message.channel)
+        return
     if d == Command.EXEC:
         exec(
             f"""
@@ -146,6 +147,7 @@ with open("data.txt", "w") as fp:
                 color=random.randint(0, 16777215),
             )
         )
+        return
     if d == Command.INFO:
         emb = data.get_i18n(lang, "info")
         await send(
@@ -157,6 +159,7 @@ with open("data.txt", "w") as fp:
                 color=random.randint(0, 16777215),
             )
         )
+        return
     if d == Command.KICK:
         if not message.author.guild_permissions.kick_members:
             await send_emb(lang, "kickf", message.channel)
@@ -194,6 +197,7 @@ with open("data.txt", "w") as fp:
                 color=random.randint(0, 1677215),
             )
         )
+        return
     if d == Command.BAN:
         if not message.author.guild_permissions.ban_members:
             await send_emb(lang, "banf", message.channel)
@@ -231,6 +235,7 @@ with open("data.txt", "w") as fp:
                 color=random.randint(0, 1677215),
             )
         )
+        return
     if d == Command.BLACKLIST:
         await send(file=discord.File("./ALpha/data/black.txt"))
         return
@@ -249,8 +254,8 @@ with open("data.txt", "w") as fp:
         await client.get_guild(766164184060002314).get_member(418023987864403968).send(
             embed=embed
         )
+        return
     if d == Command.REMOVEBLACK:
-        pass
         return
 
 
