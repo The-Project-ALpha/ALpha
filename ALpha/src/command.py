@@ -21,6 +21,8 @@ class Command(Enum):
 
 
     BLACKLIST = 30
+    ADDBLACK = 31
+    REMOVEBLACK = 32
 
 
 def GetCommand(client: discord.client, msg: discord.Message) -> Command:
@@ -75,6 +77,9 @@ def GetCommand(client: discord.client, msg: discord.Message) -> Command:
         and msg.author.guild_permissions.manage_messages
     ):
         return Command.CLEAR
-    if(mcl == "~black list"):
-        return Command.BLACKLIST
+    if(mcsl[0] == "~black"):
+        if(mcsl[1] == "list"):
+            return Command.BLACKLIST
+        if(mcsl[1] == "add"):
+            return Command.ADDBLACK
     return Command.NONE

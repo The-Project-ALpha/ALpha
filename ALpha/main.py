@@ -15,7 +15,6 @@ from src import log
 
 from src.command import Command
 
-
 # client
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
@@ -81,16 +80,14 @@ async def on_message(message: discord.Message):
         return
     data.set_traffic(message.author)
     c = data.check(message.guild)
-    if not c == None:
-        title = "안녕하세요 👋" if c == "kor" else "Hi there 👋"
-        des = (
-            f"ALpha 봇을 `{message.guild.name}` 서버에 추가해 주셔서 감사합니다!\n~help 명령어로 열 수 있는 도움말을 참고해보세요!"
-            if c == "kor"
-            else f"Thank you for adding the ALpha bot to the {message.guild.name} server!See the help that you can open with the \n~help command!"
-        )
-        color = random.randint(0, 1677215)
+    if c is not None:
+        emb = data.get_i18n(c, "invited")
         await message.guild.owner.send(
-            embed=discord.Embed(title=title, description=des, color=color)
+            embed=discord.Embed(
+                title=emb["TITLE"],
+                description=emb["DESCRIPTION"].format(message.guild.name),
+                color=random.randint(0, 1677215),
+            )
         )
         await message.guild.owner.send(
             embed=discord.Embed(
@@ -190,7 +187,7 @@ with open("data.txt", "w") as fp:
             embed=discord.Embed(
                 title=emb["TITLE"],
                 description=emb["DESCRIPTION"].format(
-                    user.name, user._user.id, user._user.discriminator
+                    user.name, user.user.id, user.user.discriminator
                 ),
                 color=random.randint(0, 1677215),
             )
@@ -227,17 +224,32 @@ with open("data.txt", "w") as fp:
             embed=discord.Embed(
                 title=emb["TITLE"],
                 description=emb["DESCRIPTION"].format(
-                    user.name, user._user.id, user._user.discriminator
+                    user.name, user.user.id, user.user.discriminator
                 ),
                 color=random.randint(0, 1677215),
             )
         )
     if d == Command.BLACKLIST:
-        print("진입")
-        with open("./ALpha/data/black.txt", "r") as fp:
-            await send("alskdjf")
-            await send(file=discord.File(fp=fp, filename="black.txt"))
-        await send("adsf")
+        await send(file=discord.File("./ALpha/data/black.txt"))
+    if d == Command.ADDBLACK:
+
+        def check(m):
+            return m.author == message.author and m.channel == message.channel
+
+        uid = message.content.split()[2]
+        reason = " ".join(message.content.split()[3:])
+        msg = await client.wait_for("message", check=check)
+        embed = discord.Embed(
+            title="신고",
+            description=f"ID : {uid}\nReporter ID : {msg.author.id}\nREASON : {reason}",
+        )
+        embed.set_image(url=msg.attachments[0].url)
+        await client.get_guild(766164184060002314).get_member(418023987864403968).send(
+            embed=embed
+        )
+    if d == Command.REMOVEBLACK:
+        pass
+        pass
 
 
 @client.event
