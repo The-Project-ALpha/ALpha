@@ -1,5 +1,4 @@
 import discord
-import json
 import random
 import data
 
@@ -69,7 +68,7 @@ def reaction_clear(
     )
 
 
-def guild_channel_delete(channel: discord.abc.GuildChannel) -> discord.Embed:
+def guild_channel_delete(channel) -> discord.Embed:
     emb = data.get_i18n(data.get_language(channel.guild.id), "lgcd")
     return embed(
         title=emb["TITLE"],
@@ -78,7 +77,7 @@ def guild_channel_delete(channel: discord.abc.GuildChannel) -> discord.Embed:
     )
 
 
-def guild_channel_create(channel: discord.abc.GuildChannel) -> discord.Embed:
+def guild_channel_create(channel) -> discord.Embed:
     emb = data.get_i18n(data.get_language(channel.guild.id), "lgcc")
     return embed(
         title=emb["TITLE"],
@@ -88,7 +87,7 @@ def guild_channel_create(channel: discord.abc.GuildChannel) -> discord.Embed:
 
 
 def guild_channel_update(
-    before: discord.abc.GuildChannel, aefore: discord.abc.GuildChannel
+    before, aefore
 ) -> discord.Embed:
     emb = data.get_i18n(data.get_language(before.guild.id), "lgcu")
     return embed(
@@ -126,7 +125,7 @@ def member_update(before: discord.Member, after: discord.Member):
 
 
 def guild_update(before: discord.Guild, after: discord.Guild):
-    emb = data.get_i18n(data.get_language(before.guild.id), "lgu")
+    emb = data.get_i18n(data.get_language(before.id), "lgu")
     return embed(
         title=emb["TITLE"],
         description=emb["DESCRIPTION"],

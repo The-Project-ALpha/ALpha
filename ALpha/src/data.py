@@ -130,8 +130,3 @@ def change_black_into_readable():
     with open("./ALpha/data/black.txt", "w") as fp:
         fp.write(data)
     return
-
-
-if __name__ == "__main__":
-    change_black_into_readable()
-save()

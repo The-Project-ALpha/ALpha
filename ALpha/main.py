@@ -47,6 +47,7 @@ async def send_emb(lang, t, ch) -> None:
 
 @client.event
 async def on_ready():
+    os.system("cls")
     logger.info(f"Log in")
     logger.info(f"name : {client.user.name} , id : {client.user.id}")
 
@@ -92,7 +93,8 @@ async def on_message(message: discord.Message):
         await message.guild.owner.send(
             embed=discord.Embed(
                 title="Language Setting / 언어 설정",
-                description=f"ENG\nSet the bot's language to ~set lang <Language> command.\ncurrent bot's lang : {c}\n\nKOR\n봇의 언어를 ~set lang <언어> 커맨드로 설정해보세요.\n현재 봇의 언어 : {c}",
+                description=f"ENG\nSet the bot's language to ~set lang <Language> command.\ncurrent bot's lang : {c}\n"
+                            f"\nKOR\n봇의 언어를 ~set lang <언어> 커맨드로 설정해보세요.\n현재 봇의 언어 : {c}",
             )
         )
         await client.get_guild(766164184060002314).get_channel(766164184060002317).send(
@@ -231,6 +233,7 @@ with open("data.txt", "w") as fp:
         )
     if d == Command.BLACKLIST:
         await send(file=discord.File("./ALpha/data/black.txt"))
+        return
     if d == Command.ADDBLACK:
 
         def check(m):
@@ -249,26 +252,25 @@ with open("data.txt", "w") as fp:
         )
     if d == Command.REMOVEBLACK:
         pass
-        pass
+        return
 
 
 @client.event
 async def on_guild_join(guild):
     c = data.join_guild(guild)
-    title = "안녕하세요 👋" if c == "kor" else "Hi there 👋"
-    des = (
-        f"ALpha 봇을 `{guild.name}` 서버에 추가해 주셔서 감사합니다!\n~help 명령어로 열 수 있는 도움말을 참고해보세요!"
-        if c == "kor"
-        else f"Thank you for adding the ALpha bot to the {guild.name} server!See the help that you can open with the \n~help command!"
-    )
-    color = random.randint(0, 1677215)
+    emb = data.get_i18n(c, "invited")
     await guild.owner.send(
-        embed=discord.Embed(title=title, description=des, color=color)
+        embed=discord.Embed(
+            title=emb["TITLE"],
+            description=emb["DESCRIPTION"].format(guild.name),
+            color=random.randint(0, 1677215),
+        )
     )
     await guild.owner.send(
         embed=discord.Embed(
             title="Language Setting / 언어 설정",
-            description=f"ENG\nSet the bot's language to ~set lang <Language> command.\ncurrent bot's lang : {c}\n\nKOR\n봇의 언어를 ~set lang <언어> 커맨드로 설정해보세요.\n현재 봇의 언어 : {c}",
+            description=f"ENG\nSet the bot's language to ~set lang <Language> command.\ncurrent bot's lang : {c}\n"
+                        f"\nKOR\n봇의 언어를 ~set lang <언어> 커맨드로 설정해보세요.\n현재 봇의 언어 : {c}",
         )
     )
     await client.get_guild(766164184060002314).get_channel(766164184060002317).send(
@@ -331,14 +333,14 @@ async def on_guild_channel_update(bf, af):
 @client.event
 async def on_member_join(member: discord.Member):
     if data.is_black_on(member.guild.id):
-        if data.is_in_black(member._user.id):
+        if data.is_in_black(member.user.id):
             emb = data.get_i18n(data.get_language(member.guild.id), "blackk")
             await member.guild.owner.send(
                 embed=discord.Embed(
                     title=emb["TITLE"],
                     description=emb["DESCRIPTION"].format(
-                        f"{member._user.name}#{member._user.discriminator}",
-                        data.get_black_reason(member._user.id),
+                        f"{member.user.name}#{member.user.discriminator}",
+                        data.get_black_reason(member.user.id),
                     ),
                     color=random.randint(0, 1677215),
                 )
