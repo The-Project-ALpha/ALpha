@@ -94,7 +94,7 @@ async def on_message(message: discord.Message):
             embed=discord.Embed(
                 title="Language Setting / 언어 설정",
                 description=f"ENG\nSet the bot's language to ~set lang <Language> command.\ncurrent bot's lang : {c}\n"
-                            f"\nKOR\n봇의 언어를 ~set lang <언어> 커맨드로 설정해보세요.\n현재 봇의 언어 : {c}",
+                f"\nKOR\n봇의 언어를 ~set lang <언어> 커맨드로 설정해보세요.\n현재 봇의 언어 : {c}",
             )
         )
         await client.get_guild(766164184060002314).get_channel(766164184060002317).send(
@@ -240,6 +240,7 @@ with open("data.txt", "w") as fp:
         await send(file=discord.File("./ALpha/data/black.txt"))
         return
     if d == Command.ADDBLACK:
+
         def check(m):
             return m.author == message.author and m.channel == message.channel
 
@@ -274,7 +275,7 @@ async def on_guild_join(guild):
         embed=discord.Embed(
             title="Language Setting / 언어 설정",
             description=f"ENG\nSet the bot's language to ~set lang <Language> command.\ncurrent bot's lang : {c}\n"
-                        f"\nKOR\n봇의 언어를 ~set lang <언어> 커맨드로 설정해보세요.\n현재 봇의 언어 : {c}",
+            f"\nKOR\n봇의 언어를 ~set lang <언어> 커맨드로 설정해보세요.\n현재 봇의 언어 : {c}",
         )
     )
     await client.get_guild(766164184060002314).get_channel(766164184060002317).send(
@@ -385,14 +386,14 @@ async def on_guild_role_update(bf: discord.Role, af: discord.Role):
 
 @client.event
 async def on_guild_emojis_update(
-        guild: discord.Guild, bf: discord.Emoji, af: discord.Emoji
+    guild: discord.Guild, bf: discord.Emoji, af: discord.Emoji
 ):
     pass
 
 
 @client.event
 async def on_voice_state_update(
-        member: discord.Member, bf: discord.VoiceState, af: discord.VoiceState
+    member: discord.Member, bf: discord.VoiceState, af: discord.VoiceState
 ):
     pass
 
