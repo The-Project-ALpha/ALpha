@@ -4,7 +4,7 @@ import data
 
 
 def get_channel(guild: discord.Guild) -> discord.TextChannel:
-    return guild.get_channel(data.get_log_channel(guild.id))
+    return guild.get_channel(data.get_log_channel(guild.id)) if data.get_log_channel(guild.id) is not 0 else None
 
 
 embed = discord.Embed

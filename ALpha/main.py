@@ -235,7 +235,6 @@ with open("data.txt", "w") as fp:
         await send(file=discord.File("./ALpha/data/black.txt"))
         return
     if d == Command.ADDBLACK:
-
         def check(m):
             return m.author == message.author and m.channel == message.channel
 
@@ -287,12 +286,13 @@ def save():
 
 @client.event
 async def on_message_delete(msg: discord.Message):
-    await log.get_channel(msg.guild).send(embed=log.message_delete(msg))
+    if log.get_channel(msg.guild.id) is None:
+        return
 
 
 @client.event
 async def on_bulk_message_delete(msgs: discord.Message):
-    await log.get_channel(msgs[0].guild).send(embed=log.bulk_message_delete(msgs))
+    pass
 
 
 @client.event
@@ -380,14 +380,14 @@ async def on_guild_role_update(bf: discord.Role, af: discord.Role):
 
 @client.event
 async def on_guild_emojis_update(
-    guild: discord.Guild, bf: discord.Emoji, af: discord.Emoji
+        guild: discord.Guild, bf: discord.Emoji, af: discord.Emoji
 ):
     pass
 
 
 @client.event
 async def on_voice_state_update(
-    member: discord.Member, bf: discord.VoiceState, af: discord.VoiceState
+        member: discord.Member, bf: discord.VoiceState, af: discord.VoiceState
 ):
     pass
 
