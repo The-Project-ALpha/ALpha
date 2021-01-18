@@ -6,8 +6,7 @@ class Command(Enum):
     NONE = 1
     HELP = 2
     HELLO = 3
-    RESTART = 4
-    LANGSET = 5
+    RESTART = 4 
     EXEC = 6
     INFO = 7
 
@@ -16,7 +15,12 @@ class Command(Enum):
     MUTE = 12
     CLEAR = 13
 
-    BLACKLIST = 20
+
+    LANGSET = 20
+    LOGSET = 21
+
+
+    BLACKLIST = 30
 
 
 def GetCommand(client: discord.client, msg: discord.Message) -> Command:
@@ -46,6 +50,8 @@ def GetCommand(client: discord.client, msg: discord.Message) -> Command:
     ) and msg.author.guild_permissions.administrator:
         if mcsl[1] == "lang":
             return Command.LANGSET
+        if mcsl[1] == "logch":
+            return Command.LOGSET
     if (
         mcsl[0] == "~kick"
         and (not len(mcsl) == 1)
