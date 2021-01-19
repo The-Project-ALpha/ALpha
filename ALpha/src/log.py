@@ -4,7 +4,11 @@ import data
 
 
 def get_channel(guild: discord.Guild) -> discord.TextChannel:
-    return guild.get_channel(data.get_log_channel(guild.id)) if data.get_log_channel(guild.id) is not 0 else None
+    return (
+        guild.get_channel(data.get_log_channel(guild.id))
+        if data.get_log_channel(guild.id) is not 0
+        else None
+    )
 
 
 embed = discord.Embed
@@ -86,9 +90,7 @@ def guild_channel_create(channel) -> discord.Embed:
     )
 
 
-def guild_channel_update(
-    before, aefore
-) -> discord.Embed:
+def guild_channel_update(before, aefore) -> discord.Embed:
     emb = data.get_i18n(data.get_language(before.guild.id), "lgcu")
     return embed(
         title=emb["TITLE"],

@@ -6,7 +6,7 @@ class Command(Enum):
     NONE = 1
     HELP = 2
     HELLO = 3
-    RESTART = 4 
+    RESTART = 4
     EXEC = 6
     INFO = 7
 
@@ -15,10 +15,8 @@ class Command(Enum):
     MUTE = 12
     CLEAR = 13
 
-
     LANGSET = 20
     LOGSET = 21
-
 
     BLACKLIST = 30
     ADDBLACK = 31
@@ -54,10 +52,7 @@ def GetCommand(client: discord.client, msg: discord.Message) -> Command:
             return Command.LANGSET
         if mcsl[1] == "logch":
             return Command.LOGSET
-    if (
-        mcsl[0] == "~kick"
-        and (not len(mcsl) == 1)
-    ):
+    if mcsl[0] == "~kick" and (not len(mcsl) == 1):
         return Command.KICK
     if (
         mcsl[0] == "~ban"
@@ -77,9 +72,9 @@ def GetCommand(client: discord.client, msg: discord.Message) -> Command:
         and msg.author.guild_permissions.manage_messages
     ):
         return Command.CLEAR
-    if(mcsl[0] == "~black"):
-        if(mcsl[1] == "list"):
+    if mcsl[0] == "~black":
+        if mcsl[1] == "list":
             return Command.BLACKLIST
-        if(mcsl[1] == "add"):
+        if mcsl[1] == "add":
             return Command.ADDBLACK
     return Command.NONE

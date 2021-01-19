@@ -1,4 +1,4 @@
-black ./ALpha/src/data.py
-black ./ALpha/src/command.py
-black ./ALpha/src/logger.py
 black ./ALpha/main.py
+black ./ALpha/src/command.py
+black ./ALpha/src/data.py
+black ./ALpha/src/log.py
