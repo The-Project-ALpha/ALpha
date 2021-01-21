@@ -419,37 +419,32 @@ async def on_invite_delete(invite: discord.Invite):
 
 
 @client.event
-async def on_raw_message_delete(payload):
+async def on_raw_message_delete(payload: discord.RawMessageDeleteEvent):
     pass
 
 
 @client.event
-async def on_raw_bulk_message_delete(payload):
+async def on_raw_bulk_message_delete(payload: discord.RawBulkMessageDeleteEvent):
     pass
 
 
 @client.event
-async def on_raw_message_edit(payload):
+async def on_raw_message_edit(payload: discord.RawMessageUpdateEvent):
     pass
 
 
 @client.event
-async def on_raw_reaction_add(payload):
+async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
     pass
 
 
 @client.event
-async def on_raw_reaction_remove(payload):
+async def on_raw_reaction_clear(payload: discord.RawReactionClearEvent):
     pass
 
 
 @client.event
-async def on_raw_reaction_clear(payload):
-    pass
-
-
-@client.event
-async def on_raw_reaction_clear_emoji(payload):
+async def on_raw_reaction_clear_emoji(payload: discord.RawReactionClearEmojiEvent):
     pass
 
 
